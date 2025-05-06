@@ -1,6 +1,5 @@
 streamlit
 streamlit-authenticator
-sqlite3
 requests
 beautifulsoup4
 openai
