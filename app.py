@@ -1,11 +1,20 @@
 import streamlit as st
-from db import create_user_table, create_chat_table
-from auth import show_login_page
+from login import login_page
+from user import user_page
+from admin import admin_page
 
-create_user_table()
-create_chat_table()
-
+# Hide Streamlit's sidebar completely for login
 st.set_page_config(page_title="Placement ChatBot", layout="centered")
-st.title("Welcome to Tamil Nadu IT Placement ChatBot")
 
-show_login_page()
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+if not st.session_state.logged_in:
+    login_page()
+else:
+    role = st.session_state.get("role")
+    if role == "user":
+        user_page()
+    elif role == "admin":
+        admin_page()
+
