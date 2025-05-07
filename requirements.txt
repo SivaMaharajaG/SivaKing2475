@@ -1,5 +1,6 @@
-streamlit
-streamlit-authenticator
+streamlit 
+pandas
+datetime
+json
+os
 requests
-beautifulsoup4
-openai
