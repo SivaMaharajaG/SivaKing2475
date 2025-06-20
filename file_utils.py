@@ -1,9 +1,9 @@
-# file_utils.py
+## file_utils.py
 import fitz  # PyMuPDF
 import re
 
-def extract_text_from_pdf(pdf_path):
-    doc = fitz.open(pdf_path)
+def extract_text_from_pdf(pdf_file):
+    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
     text = ""
     for page in doc:
         text += page.get_text()
@@ -11,7 +11,8 @@ def extract_text_from_pdf(pdf_path):
 
 def chunk_text(text, max_length=300):
     sentences = re.split(r'(?<=[.!?]) +', text)
-    chunks, current = [], ""
+    chunks = []
+    current = ""
     for sentence in sentences:
         if len(current) + len(sentence) < max_length:
             current += " " + sentence
