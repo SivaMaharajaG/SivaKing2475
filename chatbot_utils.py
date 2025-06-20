@@ -1,11 +1,12 @@
 # chatbot_utils.py
+
 import requests
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import re
 
-# Sample knowledge base (this should be updated with real chunked data)
+# Sample knowledge base (can be updated from uploaded PDF chunks)
 knowledge_base = [
     "TCS offers placement for B.E, B.Tech, and MCA graduates.",
     "Infosys hires candidates with a degree in Computer Science or IT.",
