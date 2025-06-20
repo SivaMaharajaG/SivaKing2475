@@ -1,11 +1,11 @@
 # it_placement_chatbot_app.py
 
-# Importing necessary modules
 import streamlit as st
 import sqlite3
 from datetime import datetime
 from webbrowser import open as open_web
 from chatbot_utils import get_relevant_chunks, query_web, generate_response
+from file_utils import extract_text_from_pdf, chunk_text
 
 # Database setup
 def create_tables():
@@ -74,18 +74,13 @@ def user_chat():
 
     query = st.text_input("Ask about IT placements in Tamil Nadu")
     if st.button("Submit"):
-        # Process and get relevant chunks
         chunks = get_relevant_chunks(query)
-        # Use browsing
         web_data = query_web(query)
-        # Generate response
         response = generate_response(query, chunks, web_data)
 
-        # Display
         st.markdown(f"**You:** {query}")
         st.markdown(f"**Bot:** {response}")
 
-        # Save to history
         st.session_state.chat_history.append((query, response))
         conn = sqlite3.connect('users.db')
         c = conn.cursor()
@@ -112,6 +107,14 @@ def admin_dashboard():
         st.markdown(f"**Username:** {u[0]} | **Qualification:** {u[1]} | **Role:** {u[2]}")
     conn.close()
 
+    st.markdown("### Upload Company PDF Info")
+    pdf_file = st.file_uploader("Upload Company Placement PDF", type=['pdf'])
+    if pdf_file:
+        text = extract_text_from_pdf(pdf_file)
+        chunks = chunk_text(text)
+        st.session_state['uploaded_chunks'] = chunks
+        st.success(f"Uploaded and chunked {len(chunks)} segments.")
+
 # Profile Edit
 
 def profile():
@@ -124,6 +127,13 @@ def profile():
         conn.commit()
         conn.close()
         st.success("Profile updated")
+
+    st.markdown("### Upload Resume")
+    resume = st.file_uploader("Upload your resume (PDF)", type=['pdf'])
+    if resume:
+        resume_text = extract_text_from_pdf(resume)
+        st.success("Resume uploaded and read successfully.")
+        st.text_area("Resume Text", resume_text[:1000], height=200)
 
 # Main
 
@@ -150,4 +160,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-          
