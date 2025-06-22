@@ -156,7 +156,7 @@ def main():
         elif menu == "Logout":
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
-            st.experimental_rerun()
+            return st.experimental_rerun()
 
 if __name__ == '__main__':
-    main()
+   return main()
